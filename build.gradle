@@ -1,0 +1,161 @@
+buildscript {
+    ext {
+        kotlinVersion = '1.6.10'
+        gradlePluginVersion = '0.42.0'
+        ktlintVersion = '10.3.0'
+        detektVersion = '1.19.0'
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        classpath "org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion"
+        classpath "org.jetbrains.kotlin:kotlin-noarg:$kotlinVersion"
+        classpath "com.github.ben-manes:gradle-versions-plugin:$gradlePluginVersion"
+    }
+}
+plugins {
+    id "org.jlleitschuh.gradle.ktlint" version "$ktlintVersion"
+    id "io.gitlab.arturbosch.detekt" version "$detektVersion"
+}
+
+apply plugin: 'idea'
+apply plugin: 'maven-publish'
+apply plugin: 'java-library'
+
+ext {
+    jacksonVersion = '2.13.1'
+    junitVersion = '5.8.2'
+    springBootVersion = '2.6.3'
+    logbackVersion = '6.6'
+}
+repositories {
+    mavenCentral()
+    jcenter()
+    maven { url 'https://plugins.gradle.org/m2/' }
+}
+
+allprojects {
+    apply plugin: "org.jlleitschuh.gradle.ktlint"
+    apply plugin: 'io.gitlab.arturbosch.detekt'
+}
+
+subprojects {
+    group 'com.turo'
+    apply plugin: 'kotlin'
+    //  Uncomment if using jpa to enable automatic default constructor handling of @Entity classes
+    //    apply plugin: 'kotlin-jpa'
+    apply plugin: 'kotlin-spring'
+    apply plugin: 'idea'
+    apply plugin: 'maven-publish'
+    apply plugin: 'com.github.ben-manes.versions'
+    // Provides task "dependencyUpdates" which checks to see if newer libraries are available
+
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven { url 'https://repo.spring.io/snapshot' }
+        maven { url 'https://repo.spring.io/milestone' }
+        maven {
+            url 'https://turo.jfrog.io/turo/libs-release-local'
+            credentials {
+                username artifactoryUsername
+                password artifactoryAuthToken
+            }
+        }
+    }
+
+    def publish = properties.get("publish").toString().toBoolean()
+    if (publish) {
+        publishing {
+            repositories {
+                maven {
+                    def releasesRepoUrl = "https://turo.jfrog.io/turo/libs-release-local"
+                    def snapshotsRepoUrl = "https://turo.jfrog.io/turo/libs-snapshot-local"
+                    url = version.toString().endsWith("SNAPSHOT") ? uri(snapshotsRepoUrl) : uri(releasesRepoUrl)
+                    credentials {
+                        username = "$artifactoryUsername"
+                        password = "$artifactoryAuthToken"
+                    }
+                    url = url
+                }
+            }
+            publications {
+                maven(MavenPublication) {
+                    groupId = project.group.toString()
+                    artifactId = project.name
+                    version = project.version.toString()
+
+                    from components.java
+                }
+            }
+        }
+    }
+
+    sourceCompatibility = 17
+
+    compileKotlin {
+        kotlinOptions {
+            freeCompilerArgs = ['-Xjsr305=strict']
+            jvmTarget = '17'
+        }
+    }
+    compileTestKotlin {
+        kotlinOptions {
+            freeCompilerArgs = ['-Xjsr305=strict']
+            jvmTarget = '17'
+        }
+    }
+
+    dependencies {
+        implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+        implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
+        testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+        testImplementation "org.junit.jupiter:junit-jupiter-params:$junitVersion"
+        testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+    }
+
+    // Send version to teamcity if requested
+    task setVersionInfo {
+        def apiVersion = '1.0'
+        if(version == "unspecified"){
+            if (project.hasProperty('buildNumber') && project.hasProperty('branch') && project.hasProperty('isDefault')) {
+                def branchString = (isDefault == "true" ? "" : "-" + branch.replaceAll(/[^\w\d]+/, "_"))
+                version = "${buildNumber}${branchString}"
+            } else {
+                version = "${apiVersion}.0-dev"
+            }
+        }
+        ext.version = version
+        println "Version [${version}]"
+        ext.version = version
+    }
+
+    test {
+        // Enable JUnit 5 (Gradle 4.6+).
+        useJUnitPlatform()
+
+        // Always run tests, even when nothing changed.
+        dependsOn 'cleanTest'
+
+        // Show test results.
+        testLogging {
+            events 'passed', 'skipped', 'failed'
+        }
+    }
+
+    task detektAll(type: io.gitlab.arturbosch.detekt.Detekt) {
+        description = "Runs the whole project at once."
+        parallel = true
+        failFast = true
+        autoCorrect = true
+        setSource "$projectDir"
+        include "**/*.kt", "**/*.kts"
+        exclude "**/resources/**", "**/build/**"
+        buildUponDefaultConfig = true
+        config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
+        reports {
+            xml.enabled = false
+            html.enabled = false
+            txt.enabled = false
+        }
+    }
+}

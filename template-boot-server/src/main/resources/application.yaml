@@ -1,0 +1,6 @@
+simple:
+  variable: this is a dog
+  secret: this isn't very secret
+simple-number:
+  variable: 0.0
+  secret: 0.0

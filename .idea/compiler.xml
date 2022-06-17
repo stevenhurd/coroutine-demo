@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="template-boot.template-boot-client" target="17" />
+      <module name="template-boot.template-boot-client.main" target="17" />
+      <module name="template-boot.template-boot-client.test" target="17" />
+      <module name="template-boot.template-boot-common" target="17" />
+      <module name="template-boot.template-boot-common.main" target="17" />
+      <module name="template-boot.template-boot-common.test" target="17" />
+      <module name="template-boot.template-boot-server" target="17" />
+      <module name="template-boot.template-boot-server.main" target="17" />
+      <module name="template-boot.template-boot-server.test" target="17" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

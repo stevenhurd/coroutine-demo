@@ -1,0 +1,84 @@
+#!/usr/bin/env bash
+
+set -e
+
+# A lot of this is borrowed from https://github.com/engageinteractive/laravel/blob/master/scripts/bootstrap
+
+# Bash color variables
+COLOR_GREEN="\x1b[32;01m"
+COLOR_RED="\x1b[31;01m"
+COLOR_RESET="\x1b[39;49;00m"
+
+MINIMUM_DOCKER_VERSION=19.03
+MINIMUM_DOCKER_COMPOSE_VERSION=1.27
+
+# Check cli binary executes
+function executableCheck() {
+  local EXE=$1
+  local NAME=$2
+  if [ "$EXE" == "0" ]; then
+    echo No \"${NAME}\" command found
+    exit 1
+  fi
+
+  # check if the command is executable
+  if [ ! -e ${EXE} ]; then
+    echo -e $COLOR_RED"ERROR"$COLOR_RESET" ${NAME} is installed but not executable"
+  fi
+}
+
+# Check version number meets requirements
+function versionCheck() {
+  local VERSION=$1
+  local MINIMUM=$2
+  local SYSTEM=$3
+  local CHECK=$(echo "$VERSION>=$MINIMUM" | bc -l)
+  if [ "$CHECK" == "0" ]; then
+    echo -e $COLOR_RED"ERROR"$COLOR_RESET" ${SYSTEM} version mismatch, please upgrade. Required version: $MINIMUM"
+    exit 1
+  fi
+}
+
+echo -e "🚀  Bootstrapping project..."
+
+if [[ $CI != "true" ]]; then
+
+  echo -e "🐳  Checking local Docker environment"
+
+  # validate Docker command and version
+  DOCKER_EXE=$(/usr/bin/which docker || echo 0)
+  executableCheck ${DOCKER_EXE} "docker"
+
+  DOCKER_VERSION=$(${DOCKER_EXE} --version | cut -f 3 -d' ' | cut -f 1,2 -d '.')
+  versionCheck ${DOCKER_VERSION} ${MINIMUM_DOCKER_VERSION} "Docker"
+
+fi
+
+if [ -f "Brewfile" ] && [ "$(uname -s)" = "Darwin" ]; then
+  brew bundle check >/dev/null 2>&1 || {
+    echo -e "🛠 Installing Homebrew dependencies…\n"
+    brew bundle
+  }
+fi
+
+if [[ $CI != "true" ]]; then
+  echo -e "⚓  Setting up commit hooks"
+  pre-commit install
+fi
+
+if [[ $CI != "true" ]]; then
+  echo -e "🛠 Setting up docker env file…\n"
+  # Create a .env file for docker compose with the project name
+  # and a suffix for image tags when running on an M1
+  if [ ! -f "template-boot-server/docker/.env" ]; then
+    if [[ "$(uname -m)" == "arm64" ]]; then
+      IMAGES_PLATFORM_SUFFIX=-arm64
+    fi
+    cat <<EOF >template-boot-server/docker/.env
+COMPOSE_PROJECT_NAME=template-boot
+IMAGES_PLATFORM_SUFFIX=$IMAGES_PLATFORM_SUFFIX
+EOF
+  fi
+fi
+
+echo -e $COLOR_GREEN"✅  Done\n"$COLOR_RESET

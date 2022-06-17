@@ -1,0 +1,21 @@
+name: Release
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+jobs:
+  semantic-release:
+    name: Semantic Release
+    runs-on: ["self-hosted", "general-ubuntu"]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Npm Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.ROLLSBOT_GITHUB_ACTIONS_TOKEN }}
+          ORG_GRADLE_PROJECT_artifactoryAuthToken: ${{ secrets.ARTIFACTORY_AUTH_TOKEN }}
+          ORG_GRADLE_PROJECT_artifactoryUsername: ${{ secrets.ARTIFACTORY_USERNAME }}
+        run: |
+          sdk env install
+          export GRADLE_OPTS="-Dorg.gradle.java.home=$JAVA_HOME"
+          npm install
+          npm run release

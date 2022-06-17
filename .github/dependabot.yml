@@ -1,0 +1,56 @@
+version: 2
+registries:
+  docker-registry-registry-hub-docker-com:
+    type: docker-registry
+    url: https://registry.hub.docker.com
+    username: rollsbot
+    password: "${{secrets.DOCKER_REGISTRY_REGISTRY_HUB_DOCKER_COM_PASSWORD}}"
+  maven-repository-turo-jfrog-io-turo-libs-release-local:
+    type: maven-repository
+    url: https://turo.jfrog.io/turo/libs-release-local
+    username: dependabot
+    password: "${{secrets.MAVEN_REPOSITORY_TURO_JFROG_IO_TURO_LIBS_RELEASE_LOCAL_PASSWORD}}"
+  maven-repository-turo-jfrog-io-turo-private-third-party-libs:
+    type: maven-repository
+    url: https://turo.jfrog.io/turo/private-third-party-libs
+    username: dependabot
+    password: "${{secrets.MAVEN_REPOSITORY_TURO_JFROG_IO_TURO_PRIVATE_THIRD_PARTY_LIBS_PASSWORD}}"
+
+updates:
+  - package-ecosystem: gradle
+    directory: "/"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 20
+    assignees:
+      - greenkiwi
+    ignore:
+      - dependency-name: org.jetbrains.kotlin:kotlin-stdlib-jdk8
+        versions:
+          - 1.4.31
+      - dependency-name: org.jetbrains.kotlin:kotlin-reflect
+        versions:
+          - 1.4.31
+      - dependency-name: org.jetbrains.kotlin:kotlin-noarg
+        versions:
+          - 1.4.31
+      - dependency-name: org.jetbrains.kotlin:kotlin-allopen
+        versions:
+          - 1.4.31
+      - dependency-name: org.jetbrains.kotlin:kotlin-gradle-plugin
+        versions:
+          - 1.4.31
+    registries:
+      - maven-repository-turo-jfrog-io-turo-libs-release-local
+      - maven-repository-turo-jfrog-io-turo-private-third-party-libs
+  - package-ecosystem: docker
+    directory: "/template-boot-msvc/docker"
+    schedule:
+      interval: daily
+    open-pull-requests-limit: 20
+    assignees:
+      - greenkiwi
+    labels:
+      - dependencies
+    registries:
+      - docker-registry-registry-hub-docker-com

@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+# This script sync mainly 3 things from the template repo
+# 1. scripts
+# 2. github actions
+# 3. configuration files
+
+set -ex
+
+dest_repo=$1
+if [ ! -d "$dest_repo" ]
+then
+    echo "Directory $dest_repo DOES NOT exists."
+    exit 1
+fi
+
+current_dir=$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)
+template_repo=$(dirname "$current_dir")
+
+# Sync scripts
+mkdir -p "$dest_repo"/script
+cp "$template_repo"/script/* "$dest_repo"/script
+# Remove sync-environment as github action always use template's one
+rm "$dest_repo"/script/sync-environment
+
+# Sync github actions
+# The publish.yaml workflow has references to template-boot repo, which needs to be removed. Skip updating
+# workflows folder.
+# mkdir -p "$dest_repo"/.github/workflows
+# cp "$template_repo"/.github/workflows/*.yaml "$dest_repo"/.github/workflows
+# rm "$dest_repo"/.github/workflows/create.yaml
+
+# Sync configuration files
+mkdir -p "$dest_repo"/.idea
+cp "$template_repo"/.commitlintrc.yaml "$dest_repo"/
+cp "$template_repo"/.pre-commit-config.yaml "$dest_repo"/
+cp "$template_repo"/.releaserc.json "$dest_repo"/

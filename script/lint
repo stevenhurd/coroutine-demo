@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+set -e
+
+if [[ $GITHUB_ACTIONS != "true" ]]; then
+  # Lint files in the branch
+  pre-commit run --from-ref "$(git merge-base HEAD origin/main)" --to-ref "$(git rev-parse HEAD)"
+
+  COMMITS=$(git rev-list --ancestry-path "$(git merge-base HEAD origin/main)..$(git rev-parse HEAD)")
+  COMMIT_MESSAGE_FILENAME=lint_commit_message
+  while read -r commit; do
+    git log -1 --format=%B "$commit" > "$COMMIT_MESSAGE_FILENAME"
+    if ! pre-commit run --hook-stage commit-msg --commit-msg-filename "$COMMIT_MESSAGE_FILENAME"; then
+      rm "$COMMIT_MESSAGE_FILENAME"
+      exit 1
+    fi
+  done <<< "$COMMITS"
+  rm "$COMMIT_MESSAGE_FILENAME"
+fi

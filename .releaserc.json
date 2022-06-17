@@ -1,0 +1,23 @@
+{
+  "branches": [
+    "main",
+    {
+      "name": "(f|b|c)/*",
+      "channel": "next",
+      "prerelease": "beta-<%= (/^\\w+-\\d+/.exec(name.substr(2)) || [''])[0] %>"
+    }
+  ],
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/github",
+    "gradle-semantic-release-plugin",
+    [
+      "semantic-release-github-pullrequest",
+      {
+        "assets": ["package.json", "README.md", "gradle.properties"],
+        "baseRef": "main"
+      }
+    ]
+  ]
+}

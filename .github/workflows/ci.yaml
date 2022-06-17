@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+jobs:
+  lint:
+    name: Lint
+    runs-on: ["self-hosted", "general-ubuntu"]
+    steps:
+      - uses: open-turo/actions-jvm/lint@v1
+        with:
+          checkout-repo: true
+          github-token: ${{ secrets.ROLLSBOT_GITHUB_ACTIONS_TOKEN }}
+        env:
+          ORG_GRADLE_PROJECT_artifactoryAuthToken: ${{ secrets.ARTIFACTORY_AUTH_TOKEN }}
+          ORG_GRADLE_PROJECT_artifactoryUsername: ${{ secrets.ARTIFACTORY_USERNAME }}
+  test:
+    name: Test
+    runs-on: ["self-hosted", "general-ubuntu"]
+    steps:
+      - uses: open-turo/actions-jvm/test@v1
+        with:
+          checkout-repo: true
+          github-token: ${{ secrets.ROLLSBOT_GITHUB_ACTIONS_TOKEN }}
+        env:
+          ORG_GRADLE_PROJECT_artifactoryAuthToken: ${{ secrets.ARTIFACTORY_AUTH_TOKEN }}
+          ORG_GRADLE_PROJECT_artifactoryUsername: ${{ secrets.ARTIFACTORY_USERNAME }}

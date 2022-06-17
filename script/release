@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -e
+
+COLOR_GREEN="\x1b[32;01m"
+COLOR_RED="\x1b[31;01m"
+COLOR_RESET="\x1b[39;49;00m"
+
+echo -e "Executing NPM release"
+
+npm install
+npm run release
+
+echo -e $COLOR_GREEN"✅ Completed NPM release"$COLOR_RESET

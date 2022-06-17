@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress XmlUnboundNsPrefix -->
+<configuration>
+    <logger name="com.turo" level="all"/>
+    <logger name="com" level="info"/>
+    <logger name="org" level="info"/>
+    <logger name="org.apache" level="info"/>
+    <logger name="net" level="info"/>
+    <logger name="javax" level="info"/>
+    <logger name="sun" level="info"/>
+
+    <appender name="json" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <includeCallerData>true</includeCallerData>
+        </encoder>
+    </appender>
+
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>debug</level>
+        </filter>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p %t [%-40.40c] %X - %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <springProfile name="!log-json">
+        <root level="all">
+            <appender-ref ref="consoleAppender"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="log-json">
+        <root level="all">
+            <appender-ref ref="json"/>
+        </root>
+    </springProfile>
+
+</configuration>

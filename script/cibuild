@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+COLOR_GREEN="\x1b[32;01m"
+COLOR_RED="\x1b[31;01m"
+COLOR_RESET="\x1b[39;49;00m"
+
+set -e
+
+./gradlew build -x test -x detekt
+
+echo -e $COLOR_GREEN"✅Completed build\n"$COLOR_RESET
+echo -e "Extracting jars for image build"
+mv template-boot-server/build/libs ./libs
+cd libs
+java -Djarmode=layertools -jar *.jar extract
+
+echo -e $COLOR_GREEN"✅Done ciBuild\n"$COLOR_RESET
