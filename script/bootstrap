@@ -70,12 +70,12 @@ if [[ $CI != "true" ]]; then
   echo -e "🛠 Setting up docker env file…\n"
   # Create a .env file for docker compose with the project name
   # and a suffix for image tags when running on an M1
-  if [ ! -f "template-boot-server/docker/.env" ]; then
+  if [ ! -f "coroutine-demo-server/docker/.env" ]; then
     if [[ "$(uname -m)" == "arm64" ]]; then
       IMAGES_PLATFORM_SUFFIX=-arm64
     fi
-    cat <<EOF >template-boot-server/docker/.env
-COMPOSE_PROJECT_NAME=template-boot
+    cat <<EOF >coroutine-demo-server/docker/.env
+COMPOSE_PROJECT_NAME=coroutine-demo
 IMAGES_PLATFORM_SUFFIX=$IMAGES_PLATFORM_SUFFIX
 EOF
   fi

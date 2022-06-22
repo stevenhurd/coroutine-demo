@@ -44,7 +44,7 @@ updates:
       - maven-repository-turo-jfrog-io-turo-libs-release-local
       - maven-repository-turo-jfrog-io-turo-private-third-party-libs
   - package-ecosystem: docker
-    directory: "/template-boot-msvc/docker"
+    directory: "/coroutine-demo-msvc/docker"
     schedule:
       interval: daily
     open-pull-requests-limit: 20

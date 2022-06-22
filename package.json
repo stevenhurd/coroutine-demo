@@ -1,5 +1,5 @@
 {
-  "name": "template-boot-msvc",
+  "name": "coroutine-demo-msvc",
   "description": "Spring boot and kotlin msvc template",
   "main": "index.js",
   "private": true,
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://github.com/turo/template-boot-msvc.git"
+    "url": "git+ssh://github.com/turo/coroutine-demo-msvc.git"
   },
   "author": "",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/turo/template-boot-msvc/issues"
+    "url": "https://github.com/turo/coroutine-demo-msvc/issues"
   },
-  "homepage": "https://github.com/turo/template-boot-msvc#readme",
+  "homepage": "https://github.com/turo/coroutine-demo-msvc#readme",
   "dependencies": {
     "semantic-release-github-pullrequest": "^1.3.0",
     "gradle-semantic-release-plugin": "^1.6.2",

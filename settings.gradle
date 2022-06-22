@@ -1,2 +1,2 @@
-rootProject.name = 'template-boot'
-include 'template-boot-common', 'template-boot-client', 'template-boot-server'
+rootProject.name = 'coroutine-demo'
+include 'coroutine-demo-common', 'coroutine-demo-client', 'coroutine-demo-server'

@@ -1,0 +1,12 @@
+ext {
+    retrofitVersion = '2.9.0'
+}
+
+dependencies {
+    implementation project(':coroutine-demo-common')
+    implementation "com.squareup.retrofit2:retrofit:${retrofitVersion}"
+    implementation "com.squareup.retrofit2:converter-jackson:${retrofitVersion}"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jdk8:${jacksonVersion}"
+    implementation "com.fasterxml.jackson.module:jackson-module-kotlin:${jacksonVersion}"
+}

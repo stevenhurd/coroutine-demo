@@ -1,4 +1,4 @@
-# template-boot-msvc
+# coroutine-demo-msvc
 
 This is a template to be used when creating new spring boot microservices.
 
@@ -29,7 +29,7 @@ You need to upgrade.
 export APP_NAME_PREFIX=simple
 
 # Clone the template repo
-git clone git@github.com:turo/template-boot-msvc.git ${APP_NAME_PREFIX}-msvc
+git clone git@github.com:turo/coroutine-demo-msvc.git ${APP_NAME_PREFIX}-msvc
 
 
 cd ${APP_NAME_PREFIX}-msvc
@@ -44,7 +44,7 @@ rm rename-project.sh
 # create new git repo
 git init .
 git add .
-git commit -m "Copy of template-boot-msvc into $APP_NAME_PREFIX"
+git commit -m "Copy of coroutine-demo-msvc into $APP_NAME_PREFIX"
 ```
 
 ### create appropriate github repository
@@ -65,16 +65,16 @@ git push -u origin master
 1. Goto [Teamcity: Microservices](https://teamcity.rr.mu/admin/editProject.html?projectId=Microservices)
 2. Select create subproject
 3. Select `manually`
-4. Set the name to be your project `template-boot-msvc`
+4. Set the name to be your project `coroutine-demo-msvc`
 
 ### Add VCS to your project
 
 1. Add a VCS root by going to the `VCS Roots`section on the right side
 2. Select `Create VCS Root`
 3. Set `Type of VCS` to `Git`
-4. Set the `VCS root name` to `template-boot-msvc`
-5. The `VCS root ID` should automatically be `Microservices_TemplateBootMsvc_TemplateBootMsvc`
-6. Copy the git ssh URL, it should look like `git@github.com:turo/template-boot-msvc.git`
+4. Set the `VCS root name` to `coroutine-demo-msvc`
+5. The `VCS root ID` should automatically be `Microservices_CoroutineDemoMsvc_CoroutineDemoMsvc`
+6. Copy the git ssh URL, it should look like `git@github.com:turo/coroutine-demo-msvc.git`
 7. Enter the following branch spec
 
 ```

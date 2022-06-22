@@ -10,7 +10,7 @@ set -e
 
 echo -e $COLOR_GREEN"✅Completed build\n"$COLOR_RESET
 echo -e "Extracting jars for image build"
-mv template-boot-server/build/libs ./libs
+mv coroutine-demo-server/build/libs ./libs
 cd libs
 java -Djarmode=layertools -jar *.jar extract
 

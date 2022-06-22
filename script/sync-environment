@@ -23,7 +23,7 @@ cp "$template_repo"/script/* "$dest_repo"/script
 rm "$dest_repo"/script/sync-environment
 
 # Sync github actions
-# The publish.yaml workflow has references to template-boot repo, which needs to be removed. Skip updating
+# The publish.yaml workflow has references to coroutine-demo repo, which needs to be removed. Skip updating
 # workflows folder.
 # mkdir -p "$dest_repo"/.github/workflows
 # cp "$template_repo"/.github/workflows/*.yaml "$dest_repo"/.github/workflows

@@ -7,7 +7,7 @@ on:
 jobs:
   renaming-job:
     name: Renaming Job
-    if: ${{ github.repository != 'turo/template-boot-msvc' }}
+    if: ${{ github.repository != 'turo/coroutine-demo-msvc' }}
     runs-on: ["self-hosted", "general-ubuntu"]
     steps:
       - uses: actions/checkout@v2
