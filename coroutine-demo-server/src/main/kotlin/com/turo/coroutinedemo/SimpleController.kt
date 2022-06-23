@@ -2,10 +2,8 @@ package com.turo.coroutinedemo
 
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Mono
-import java.util.concurrent.CompletableFuture
 
 @RestController
 class SimpleController(private val service: SimpleService) {
@@ -20,21 +18,6 @@ class SimpleController(private val service: SimpleService) {
         val simpleDto = service.get()
 
         logger.info("GET controller - response: ${Thread.currentThread()}")
-
-        return simpleDto
-    }
-
-    @GetMapping("/sample-async")
-    fun doGetAsync(
-        @RequestParam(defaultValue = "5")
-        delaySeconds: Long
-    ): CompletableFuture<SimpleDto> {
-
-        logger.info("GET ASYNC controller - request entry: ${Thread.currentThread()}")
-
-        val simpleDto = service.getAsync(delaySeconds)
-
-        logger.info("GET ASYNC controller - response: ${Thread.currentThread()}")
 
         return simpleDto
     }

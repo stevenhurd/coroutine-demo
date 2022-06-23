@@ -9,28 +9,27 @@ import java.time.Duration
 private const val SLEEP_IN_MS = 5000L
 
 @Component
-class MockExternalDataSource {
+class MockExternalDataSource2 {
 
     // simulates an external call taking some data and returning something
-    fun getExternalData(variable: String, secret: String): String {
+    fun getExternalData(dataSource1Result: String, longRunningCalculationResult: String): String {
 
         Thread.sleep(SLEEP_IN_MS)
-        return "$variable:$secret:sync"
+        return "$dataSource1Result:$longRunningCalculationResult:sync"
     }
 
     // simulates an external call through a reactive-aware client
-    fun getExternalDataMono(variable: String, secret: String): Mono<String> {
+    fun getExternalDataMono(dataSource1Result: String, longRunningCalculationResult: String): Mono<String> {
 
         return Mono.delay(Duration.ofMillis(SLEEP_IN_MS))
-            .map { "$variable:$secret:mono" }
+            .map { "$dataSource1Result:$longRunningCalculationResult:mono" }
             .subscribeOn(Schedulers.boundedElastic())
     }
 
     // simulates an external call through a coroutine enabled client
-    suspend fun getExternalDataSuspend(variable: String, secret: String): String {
+    suspend fun getExternalDataSuspend(dataSource1Result: String, longRunningCalculationResult: String): String {
 
         delay(SLEEP_IN_MS)
-        // Thread.sleep(SLEEP_IN_MS)
-        return "$variable:$secret:suspend"
+        return "$dataSource1Result:$longRunningCalculationResult:suspend"
     }
 }
