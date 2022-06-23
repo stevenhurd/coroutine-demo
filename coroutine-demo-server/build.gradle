@@ -14,6 +14,14 @@ dependencies {
     implementation project(':coroutine-demo-common')
     implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
     implementation "org.springframework.boot:spring-boot-starter-actuator:${springBootVersion}"
+
+    // this library supports bidirectional translation between kotlin coroutines and reactor types
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.6.2"
+
+    // reactor for enabling a reactive web server
+    implementation "io.projectreactor:reactor-core:3.5.0-M3"
+    testImplementation "io.projectreactor:reactor-test:3.5.0-M3"
+
     runtimeOnly "net.logstash.logback:logstash-logback-encoder:${logbackVersion}"
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'junit', module: 'junit'
